@@ -138,7 +138,7 @@ class AI:
 
 		delCdelb1 = np.multiply(delCdela1,dsig1)
 
-#<<<<<<<<<-----------------------------------------------------changing the weights----------------------------------------------->>>>>>.
+#<<<<<<<<<-----------------------------------------------------changing the weights----------------------------------------------->>>>>>
 
 		self.hiddenbias2=  np.add(self.hiddenbias2,-delCdelb2)
 
@@ -164,8 +164,31 @@ class AI-initer:
 		plat = platform.system()
 
 		if("linux" in plat):
+
 			print("I have detected a linux based computer")
-			savespot = input("enter filepath for save directory")
+
+			saved = False
+
+			while(saved is False):
+
+				try:
+					savespot= input("enter directory to create save directory")
+					os.system('sudo mkdir '+savespot+'/save')
+					os.system('sudo chmod 777'+savespot+'/save')
+					saved = True
+				except:
+					print("i dont think it worked try again")
+
+			config = {
+
+				"save-directory" : savespot+'/save'
+
+				"iterations":0
+
+			}
+
+			ls.serialize(obj =config,filepath = "Stonkz-AI-config.json")
+
 
 		elif("Windows" in plat):
 			print("I have detected a Windoes based computer")
