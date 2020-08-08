@@ -14,7 +14,7 @@ ai = Neural.AI()
 print("<<<<<<<<<---------------------------------------------test script----------------------------------->>>>>>>>>>>>")
 
 
-
+"""
 for x in range(10):
 	ai.backpropagate(input = [[1],[1],[1]], output = [[0],[0],[0]])
 	ai.backpropagate(input = [[.5],[.5],[.5]], output =[[1],[0],[0]])
@@ -42,3 +42,4 @@ print(outs)
 
 print("the test has ended")
 
+"""

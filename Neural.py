@@ -1,29 +1,26 @@
 import listfuncs as ls
 import numpy as np
 import json
+import os
+from sys import platform
+
 
 class AI:
-
-#	self.savespace = "/mnt/mydisk/save/"
-
-#     path to disk for speedier writing/mnt/mydisk
-
-# this requires special setup to continue
-# run sudo chmod 77 7
 
 	def squash(self,inputs):
 		return 1/(1+np.exp(-inputs))
 
-	def __init__(self):
-"""
-		self.configfile = "junk"
+	def __init__(self,configfile):
+
+		self.configfile = "config.json"
 
 		self.settings =  {
 
 			"save":"/mnt/mydisk/save/"
-
 		}
-"""
+
+		ls.serialize(obj = self.settings,filepath = self.configfile)
+
 		self.savespace = "/mnt/mydisk/save/"
 
 		self.killbool = False
@@ -158,7 +155,24 @@ class AI:
 		self.save()
 
 
+class AI-initer:
 
+	@staticmethod
+	def buildconfig():
+
+		print("this prolly needs admin priveleges")
+		plat = platform.system()
+
+		if("linux" in plat):
+			print("I have detected a linux based computer")
+			savespot = input("enter filepath for save directory")
+
+		elif("Windows" in plat):
+			print("I have detected a Windoes based computer")
+
+		elif("Darwin" in plat):
+			print("I have detected a Mac")
+			print("Macs are overpriced and shitty seriously get rid of it")
 
 
 
