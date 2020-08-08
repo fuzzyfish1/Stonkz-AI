@@ -8,14 +8,24 @@ class AI:
 
 #     path to disk for speedier writing/mnt/mydisk
 
+# this requires special setup to continue
+# run sudo chmod 77 7
 
 	def squash(self,inputs):
 		return 1/(1+np.exp(-inputs))
 
-	def __init__(self):
+	def __init__(self, configfile):
+
+		self.configfile = "junk"
+
+		self.settings =  {
+
+			"save":"/mnt/mydisk/save/"
+
+		}
 
 		self.savespace = "/mnt/mydisk/save/"
-		self.save = False
+
 		self.killbool = False
 
 		try:
@@ -79,55 +89,18 @@ class AI:
 
 		# cols of the left must match the rows of the left
 
-
-#		print("\n\n"+"perceptrons"+"\n\n")
-#		print(perceptrons)
-
 		#self.hiddenweight2=np.array(ls.randomize2D(rows=3,cols=7))	   		#3 rows 7cols
 		#self.hiddenbias2=np.array(ls.randomize2D(rows=3,cols=1))	   		#3 rows 1 cols
 
-#		print("\n\n"+"activations1a"+"\n\n")
+		self.z1 = np.add(np.dot(self.hiddenweight1,self.perceptrons),self.hiddenbias1)
 
-		self.activations1a = np.dot(self.hiddenweight1,self.perceptrons)
+		self.activations1 = self.squash(self.z1)
 
-#		print(activations1a)
-#		print("\n\n"+"activations1b"+"\n\n")
+		self.z2 = np.add(np.dot(self.hiddenweight2,self.activations1),self.hiddenbias2)
 
-		self.activations1b = np.add(self.activations1a,self.hiddenbias1)
+		self.activations2 = self.squash(self.z2)
 
-#		print(activations1b)
-#		print("\n\n"+"activations1c"+"\n\n")
-
-		self.activations1c = self.squash(self.activations1b)
-
-#		print(activations1c)
-
-#		print("\n\n\n\n"+"-------------------propogation layer 2-----------------------"+"\n\n\n\n")
-
-
-#		print("hiddenweight2"+"\n\n")
-#		print(self.hiddenweight2)
-
-#		print("\n\n"+"hiddenbias2"+"\n\n")
-#		print(self.hiddenbias2)
-
-#		print("\n\n"+"activations2a"+"\n\n")
-
-		self.activations2a = np.dot(self.hiddenweight2,self.activations1c)
-#		print(activations2a)
-
-#		print("\n\n"+"activations2b"+"\n\n")
-
-		self.activations2b = np.add(self.activations2a,self.hiddenbias2)
-#		print(activations2b)
-
-#		print("\n\n"+"activations2c"+"\n\n")
-
-		self.activations2c = self.squash(self.activations2b)
-#		print(activations2c)
-
-		answer = self.activations2c.tolist()
-
+		answer = self.activations2.tolist()
 
 		return answer
 
@@ -145,58 +118,34 @@ class AI:
 		answer = np.array(self.predict(input))
 		correct = np.array(output)
 
-		cost = (answer- correct)**2
-#		print("the cost is:")
-#		print(cost)
+		cost = (answer - correct)**2
 
-		C = (answer-correct)
+		C = 2*(answer-correct)
 
-		#gradient calculation for second layer
+#		C = del C/del cost
 
-#		print("\n\n"+"delCdelw2"+"\n\n")
+#		behold my fucking math
 
-		dsig2 = dsigmoid(self.activations2b)
-		delCdelw2 = np.dot(np.multiply(C,dsig2),np.transpose(self.activations1c))
 
-#		print("\n\n"+"delCdelb2"+"\n\n")
+		dsig2 = dsigmoid(self.z2)
 
-		delCdelb2= 2* np.multiply(C,dsig2)
+		delCdelw2 = np.dot(np.multiply(C,dsig2),np.transpose(self.activations1))
 
-#		print(delCdelb2)
+		delCdelb2= np.multiply(C,dsig2)
 
-#		print("\n\n"+"delCdela1"+"\n\n")
+		delCdela1 = np.dot(np.transpose(np.multiply(self.hiddenweight2,dsig2)),C)
 
-		delCdela1 = 2* np.dot(np.transpose(np.multiply(self.hiddenweight2,dsig2)),C)
-
-#		print(delCdela1)
-
-#		print("\n\n"+"delCdelw1"+"\n\n")
-
-		dsig1= dsigmoid(self.activations1b)
+		dsig1= dsigmoid(self.z1)
 
 		delCdelw1 = np.dot(np.multiply(delCdela1,dsig1), np.transpose(ins))
 
-#		print(delCdelw1)
-
-#		print("\n\n"+"delCdelb1"+"\n\n")
-
 		delCdelb1 = np.multiply(delCdela1,dsig1)
-
-#		print(delCdelb1)
 
 #<<<<<<<<<-----------------------------------------------------changing the weights----------------------------------------------->>>>>>.
 
-#		print("\n\n"+"showing the new weights now"+"\n\n")
-
-#		print("\n\n"+"new bias2"+"\n\n")
-
 		self.hiddenbias2=  np.add(self.hiddenbias2,-delCdelb2)
 
-#		print("\n\n"+"new weights2"+"\n\n")
-
 		self.hiddenweight2 =np.add(self.hiddenweight2,-delCdelw2)
-
-#		print("\n\n"+"new bias1"+"\n\n")
 
 		self.hiddenbias1 = np.add(self.hiddenbias1,-delCdelb1)
 
@@ -205,9 +154,6 @@ class AI:
 		print("\n\n"+"<<<-------------------------------cost-------------------------------------->>>"+"\n\n")
 
 		print(cost)
-
-
-		self.save = True
 
 		self.save()
 
