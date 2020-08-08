@@ -2,7 +2,7 @@ import listfuncs as ls
 import numpy as np
 import json
 import os
-from sys import platform
+import platform
 
 
 class AI:
@@ -10,20 +10,13 @@ class AI:
 	def squash(self,inputs):
 		return 1/(1+np.exp(-inputs))
 
-	def __init__(self,configfile):
+	def __init__(self,configfile = "Stonkz-AI-config.json"):
 
-		self.configfile = "config.json"
-
-		self.settings =  {
-
-			"save":"/mnt/mydisk/save/"
-		}
+		self.config = ls.deserialize(filepath = configfile)
 
 		ls.serialize(obj = self.settings,filepath = self.configfile)
 
-		self.savespace = "/mnt/mydisk/save/"
-
-		self.killbool = False
+		self.savespace =  self.config["save-directory"]+'/'
 
 		try:
 
@@ -32,6 +25,7 @@ class AI:
 			self.hiddenweight2 = ls.deserialize( filepath = self.savespace+"hiddenweight2.json")
 			self.hiddenbias2 = ls.deserialize( filepath = self.savespace+"hiddenbias2.json")
 			print("i beleive the network init successfully")
+
 		except:
 
 			print("\n"+"serialization failure"+"\n"+"randomizing")
@@ -155,15 +149,20 @@ class AI:
 		self.save()
 
 
-class AI-initer:
+class AI_initer:
 
 	@staticmethod
 	def buildconfig():
 
+
+		print("\n\n"+"welcome to build config"+"\n\n")
+
+
 		print("this prolly needs admin priveleges")
+
 		plat = platform.system()
 
-		if("linux" in plat):
+		if("Linux" in plat):
 
 			print("I have detected a linux based computer")
 
@@ -181,9 +180,9 @@ class AI-initer:
 
 			config = {
 
-				"save-directory" : savespot+'/save'
+				"save-directory" : savespot+'/save',
 
-				"iterations":0
+				"iterations" : 0
 
 			}
 
