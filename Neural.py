@@ -14,8 +14,8 @@ class AI:
 	def squash(self,inputs):
 		return 1/(1+np.exp(-inputs))
 
-	def __init__(self, configfile):
-
+	def __init__(self):
+"""
 		self.configfile = "junk"
 
 		self.settings =  {
@@ -23,7 +23,7 @@ class AI:
 			"save":"/mnt/mydisk/save/"
 
 		}
-
+"""
 		self.savespace = "/mnt/mydisk/save/"
 
 		self.killbool = False
