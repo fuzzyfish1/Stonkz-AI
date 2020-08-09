@@ -12,18 +12,25 @@ class AI:
 
 	def __init__(self,configfile):
 
+		self.configpath = configfile
 		self.config = ls.deserialize(filepath = configfile)
 
 		self.iterations = self.config["iterations"]
 		self.savespace = self.config["save-directory"]
 
-
 		try:
 
-			self.hiddenweight1 = ls.deserialize( filepath = self.savespace+"hiddenweight1.json")
-			self.hiddenbias1 = ls.deserialize( filepath = self.savespace+"hiddenbias1.json")
-			self.hiddenweight2 = ls.deserialize( filepath = self.savespace+"hiddenweight2.json")
-			self.hiddenbias2 = ls.deserialize( filepath = self.savespace+"hiddenbias2.json")
+#			self.hiddenweight1 = np.array(ls.deserialize( filepath = self.savespace+"hiddenweight1.json"))
+#			self.hiddenbias1 = np.array(ls.deserialize( filepath = self.savespace+"hiddenbias1.json"))
+#			self.hiddenweight2 = np.array(ls.deserialize( filepath = self.savespace+"hiddenweight2.json"))
+#			self.hiddenbias2 = np.array(ls.deserialize( filepath = self.savespace+"hiddenbias2.json"))
+			self.halfserializedweights = ls.deserialize(filepath = self.savespace,+ "weights.json")
+
+			for w in halfserializedweights:
+				self.weights[w] = self.halfserializedweights[w]
+
+
+
 			print("i beleive the network init successfully")
 
 		except:
@@ -40,10 +47,34 @@ class AI:
 
 	def save(self):
 
-		ls.serialize( filepath = self.savespace + "hiddenweight1.json" , obj = self.hiddenweight1.tolist())
-		ls.serialize( filepath = self.savespace + "hiddenbias1.json" , obj = self.hiddenbias1.tolist())
-		ls.serialize( filepath = self.savespace + "hiddenweight2.json" , obj = self.hiddenweight2.tolist())
-		ls.serialize( filepath = self.savespace + "hiddenbias2.json" , obj = self.hiddenbias2.tolist())
+#		ls.serialize( filepath = self.savespace + "hiddenweight1.json" , obj = self.hiddenweight1.tolist())
+#		ls.serialize( filepath = self.savespace + "hiddenbias1.json" , obj = self.hiddenbias1.tolist())
+#		ls.serialize( filepath = self.savespace + "hiddenweight2.json" , obj = self.hiddenweight2.tolist())
+#		ls.serialize( filepath = self.savespace + "hiddenbias2.json" , obj = self.hiddenbias2.tolist())
+
+
+# turning everything into a list in a list in a list to save to 1 file
+
+		self.saveweights = []
+
+		for x in self.weights:
+			self.saveweights[x] = self.weights[x].tolist()
+
+		self.savebiases = []
+
+		for b in self.bias
+			self.savebiases[b] = self.bias[b].tolist()
+
+		ls.serialize(filepath = self.savespace +"weights.json", obj = self.saveweights)
+		ls.serialize(filepath = self.savespace +"biases.json", obj = self.savebiases)
+
+		config = {
+			"save-directory" : self.savespace,
+			"iterations" : self.iterations
+		}
+
+		ls.serialize( filepath = self.configpath, obj = config)
+
 
 	def printweights():
 
@@ -123,9 +154,6 @@ class AI:
 	def backpropagate(self,input = [[1],[0.2],[0.8]], output=[[.3],[.2],[.1]]):
 
 
-
-
-
 		ins = np.array(input)
 
 		def dsigmoid(z):
@@ -140,7 +168,7 @@ class AI:
 
 		cost = (answer - correct)**2
 
-		self.C = []
+		self.C = [ np.array([[0],[0]]) for x in range(len(self.activations)+1)]
 
 		self.C[len(self.activations)] = 2*(answer-correct)
 
@@ -159,10 +187,12 @@ class AI:
 			self.newbias[l] = np.multiply(self.C[l],self.dsig[l])
 			self.C[l-1] = np.dot(np.transpose(np.multiply(self.weights[l],self.dsig[l])),self.C[l])
 
+		self.iterations += 1
 		self.weights = self.newweights
 		self.bias = self.newbias
 
 		self.save()
+
 
 """
 		dsig2 = dsigmoid(self.z2)
