@@ -8,7 +8,5 @@ print("test.py initiated")
 
 creator.buildconfig()
 
-
-
-ai = AI()
+ai = AI('Stonkz-AI-config.json')
 

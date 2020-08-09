@@ -10,13 +10,13 @@ class AI:
 	def squash(self,inputs):
 		return 1/(1+np.exp(-inputs))
 
-	def __init__(self,configfile = "Stonkz-AI-config.json"):
+	def __init__(self,configfile):
 
 		self.config = ls.deserialize(filepath = configfile)
 
-		ls.serialize(obj = self.settings,filepath = self.configfile)
+		self.iterations = self.config["iterations"]
+		self.savespace = self.config["save-directory"]
 
-		self.savespace =  self.config["save-directory"]+'/'
 
 		try:
 
@@ -38,10 +38,6 @@ class AI:
 			print("AI initialized sucessfully")
 
 
-
-	def build(self):
-		pass
-
 	def save(self):
 
 		ls.serialize( filepath = self.savespace + "hiddenweight1.json" , obj = self.hiddenweight1.tolist())
@@ -51,8 +47,6 @@ class AI:
 
 	def printweights():
 
-#		print("\n\n"+"perceptrons"+"\n\n")
-#		print(perceptrons)
 		print("\n\n"+"hiddenweight1"+"\n\n")
 		print(self.hiddenweight1)
 		print("\n\n"+"hiddenbias1"+"\n\n")
@@ -151,14 +145,34 @@ class AI:
 
 class AI_initer:
 
+
 	@staticmethod
 	def buildconfig():
 
+		# make sure you have created a file named
 
 		print("\n\n"+"welcome to build config"+"\n\n")
 
+		savespot = input("input config file name in same directory"+"\n")
 
-		print("this prolly needs admin priveleges")
+		savedir = input("input save directory"+"\n")
+
+		savestring = savedir + "/"
+
+		config = {
+			"save-directory" : savestring,
+			"iterations" : 0
+		}
+
+		ls.serialize(obj =config,filepath = savespot)
+
+
+
+
+
+
+"""
+#		print("this prolly needs admin priveleges")
 
 		plat = platform.system()
 
@@ -173,7 +187,7 @@ class AI_initer:
 				try:
 					savespot= input("enter directory to create save directory")
 					os.system('sudo mkdir '+savespot+'/save')
-					os.system('sudo chmod 777'+savespot+'/save')
+					os.system('sudo chmod 777 '+savespot+'/save')
 					saved = True
 				except:
 					print("i dont think it worked try again")
@@ -196,7 +210,7 @@ class AI_initer:
 			print("I have detected a Mac")
 			print("Macs are overpriced and shitty seriously get rid of it")
 
-
+"""
 
 
 
