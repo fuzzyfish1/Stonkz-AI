@@ -6,7 +6,8 @@ import listfuncs as ls
 
 print("test.py initiated")
 
-creator.buildconfig()
+#creator.buildconfig()
 
 ai = AI('Stonkz-AI-config.json')
 
+print(ai.predict())
