@@ -13,6 +13,8 @@ ai = AI('Stonkz-AI-config.json')
 
 print(ai.predict())
 
+'''
 for x in range(100):
 
 	ai.backpropagate([[1],[0],[0]], [[0],[0],[0]])
+'''

@@ -18,31 +18,34 @@ class AI:
 		self.iterations = self.config["iterations"]
 		self.savespace = self.config["save-directory"]
 
-		try:
+		print("savespace is "+ self.savespace)
 
-#			self.hiddenweight1 = np.array(ls.deserialize( filepath = self.savespace+"hiddenweight1.json"))
-#			self.hiddenbias1 = np.array(ls.deserialize( filepath = self.savespace+"hiddenbias1.json"))
-#			self.hiddenweight2 = np.array(ls.deserialize( filepath = self.savespace+"hiddenweight2.json"))
-#			self.hiddenbias2 = np.array(ls.deserialize( filepath = self.savespace+"hiddenbias2.json"))
-			self.halfserializedweights = ls.deserialize(filepath = self.savespace,+ "weights.json")
+#		try:
 
-			for w in halfserializedweights:
-				self.weights[w] = self.halfserializedweights[w]
+		self.halfserializedweights = ls.deserialize(filepath = self.savespace+ "weights.json")
+
+		self.weights = self.halfserializedweights
+
+		for w in range(len(self.halfserializedweights)):
+			self.weights[w] = np.array(self.halfserializedweights[w])
 
 
+		self.halfserializedbiases = ls.deserialize(filepath = self.savespace + "biases.json")
 
-			print("i beleive the network init successfully")
+		self.bias= self.halfserializedbiases
 
-		except:
+		for b in range(len(self.halfserializedbiases)):
 
-			print("\n"+"serialization failure"+"\n"+"randomizing")
-			self.hiddenweight1 = np.array(ls.randomize2D(rows=7,cols=3))
-			self.hiddenbias1= np.array(ls.randomize2D(rows=7,cols=1))
-			self.hiddenweight2=np.array(ls.randomize2D(rows=3,cols=7))
-			self.hiddenbias2=np.array(ls.randomize2D(rows=3,cols=1))
+			self.bias[b] = np.array(self.halfserializedbiases[b])
 
-		finally:
-			print("AI initialized sucessfully")
+		print("i beleive the network init successfully")
+
+#		except:
+
+#			print("\n"+"serialization failure"+"\n"+"FFFFuuuuuuuckkkk")
+
+#		finally:
+#			print("AI initialized sucessfully")
 
 
 	def save(self):
@@ -55,14 +58,15 @@ class AI:
 
 # turning everything into a list in a list in a list to save to 1 file
 
-		self.saveweights = []
+		self.saveweights = self.weights
 
-		for x in self.weights:
+		for x in range(len(self.weights)):
+			print(x)
 			self.saveweights[x] = self.weights[x].tolist()
 
-		self.savebiases = []
+		self.savebiases = self.bias
 
-		for b in self.bias
+		for b in range(len(self.bias)):
 			self.savebiases[b] = self.bias[b].tolist()
 
 		ls.serialize(filepath = self.savespace +"weights.json", obj = self.saveweights)
@@ -75,32 +79,30 @@ class AI:
 
 		ls.serialize( filepath = self.configpath, obj = config)
 
+	def printweights(self):
 
-	def printweights():
+		for w in self.weights:
+			print(w)
 
-		print("\n\n"+"hiddenweight1"+"\n\n")
-		print(self.hiddenweight1)
-		print("\n\n"+"hiddenbias1"+"\n\n")
-		print(self.hiddenbias1)
-
+		for b in self.bias:
+			print(b)
 
 	def predict(self, data=[[4],[-300],[100]]):
 
+		self.printweights()
 		print("predicting")
 
 		perceptrons = self.squash(np.array(data))    #3rows 1 cols
 
 		self.activations = [perceptrons]
-		self.z = [0]
-		self.weights = [0,self.hiddenweight1,self.hiddenweight2]
-		self.bias = [0,self.hiddenbias1,self.hiddenbias2]
+		self.z = [np.array([[0]])]
 
-# x starts from 1
-# x = 0 is perceptrons
-# x is the activation being calculated
+		# x starts from 1
+		# x = 0 is perceptrons
+		# x is the activation being calculated
 
 		for x in range(1,len(self.activations)):
-
+			print("thing")
 			self.z[x] = np.add(np.dot(weights[x],self.activations[x-1]),self.bias[x])
 			self.activations[x] = self.squash(self.z[x])
 			print("calculating:")
@@ -162,7 +164,9 @@ class AI:
 
 		# inputs can only be a column of 3
 
-		print("\n\n"+"**learning**"+"\n\n")
+		print("\n\n"+"**learning**"+"\n"+"iteration:")
+		print(self.iterations)
+
 		answer = np.array(self.predict(input))
 		correct = np.array(output)
 
@@ -181,6 +185,7 @@ class AI:
 		self.newbias = [0]
 
 		for x in range(0,len(self.activations)-1):
+
 			l = len(self.activations) - x
 			self.dsig[l]= dsigmoid(self.z[l])
 			self.newweights[l] = np.dot(np.multiply(self.C[l],self.dsig[l]),np.transpose(self.activations[l]))
@@ -194,37 +199,7 @@ class AI:
 		self.save()
 
 
-"""
-		dsig2 = dsigmoid(self.z2)
 
-		delCdelw2 = np.dot(np.multiply(C,dsig2),np.transpose(self.activations1))
-
-		delCdelb2= np.multiply(C,dsig2)
-
-		delCdela1 = np.dot(np.transpose(np.multiply(self.hiddenweight2,dsig2)),C)
-
-		dsig1= dsigmoid(self.z1)
-
-		delCdelw1 = np.dot(np.multiply(delCdela1,dsig1), np.transpose(ins))
-
-		delCdelb1 = np.multiply(delCdela1,dsig1)
-
-#<<<<<<<<<-----------------------------------------------------changing the weights----------------------------------------------->>>>>>
-
-		self.hiddenbias2=  np.add(self.hiddenbias2,-delCdelb2)
-
-		self.hiddenweight2 =np.add(self.hiddenweight2,-delCdelw2)
-
-		self.hiddenbias1 = np.add(self.hiddenbias1,-delCdelb1)
-
-		self.hiddenweight1 = np.add(self.hiddenweight1,-delCdelw1)
-
-		print("\n\n"+"<<<-------------------------------cost-------------------------------------->>>"+"\n\n")
-
-		print(cost)
-
-		self.save()
-"""
 
 class AI_initer:
 
@@ -254,46 +229,6 @@ class AI_initer:
 
 
 
-"""
-#		print("this prolly needs admin priveleges")
-
-		plat = platform.system()
-
-		if("Linux" in plat):
-
-			print("I have detected a linux based computer")
-
-			saved = False
-
-			while(saved is False):
-
-				try:
-					savespot= input("enter directory to create save directory")
-					os.system('sudo mkdir '+savespot+'/save')
-					os.system('sudo chmod 777 '+savespot+'/save')
-					saved = True
-				except:
-					print("i dont think it worked try again")
-
-			config = {
-
-				"save-directory" : savespot+'/save',
-
-				"iterations" : 0
-
-			}
-
-			ls.serialize(obj =config,filepath = "Stonkz-AI-config.json")
-
-
-		elif("Windows" in plat):
-			print("I have detected a Windoes based computer")
-
-		elif("Darwin" in plat):
-			print("I have detected a Mac")
-			print("Macs are overpriced and shitty seriously get rid of it")
-
-"""
 
 
 
@@ -301,20 +236,8 @@ class AI_initer:
 
 
 
-
-
-# step 1 is to successfully propogate 2 layers                       ---------completed----------
-# step 2 is to save/freeze network				     ---------completed----------
-# step 3 is to re init the network from files			     ---------completed----------
-# step 4 is to backpropogate 2 layers				     ---------completed----------
-# step 5 is
-#	a chungus cleaning
-#	config file
-# step 6 is
-#	heavy remathing
-#	big renaming of everything
-# step 7 is external storage support				     ---------completed----------
-# step 8 is to turn the propagations into a step forward+ step back
-# step 9 is to propogate through a list of layers
-# step 10 is to backpropogate through a list of layers
-# step 11 is to create an instantiation method
+# we need to save the weights and biases in one file
+# we need to try to add ReLU neurons
+# we need to add convolution layers
+# we need to add pooling layers
+# we need to begin finding API for stock data calls
