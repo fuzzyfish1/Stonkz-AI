@@ -17,7 +17,7 @@ class AI:
 
 		self.iterations = self.config["iterations"]
 		self.savespace = self.config["save-directory"]
-
+		self.architecture = self.config["architecture"]
 		print("savespace is "+ self.savespace)
 
 #		try:
@@ -81,11 +81,14 @@ class AI:
 
 	def printweights(self):
 
+		print(self.architecture)
+
 		for w in self.weights:
 			print(w)
 
 		for b in self.bias:
 			print(b)
+
 
 	def predict(self, data=[[4],[-300],[100]]):
 
@@ -103,66 +106,24 @@ class AI:
 
 		for x in range(1,len(self.activations)):
 			print("thing")
-			self.z[x] = np.add(np.dot(weights[x],self.activations[x-1]),self.bias[x])
+			self.z[x] = np.add(np.dot(weights[x],se	lf.activations[x-1]),self.bias[x])
 			self.activations[x] = self.squash(self.z[x])
 			print("calculating:")
 			print(x)
 
 
-
 		answer = self.activations[-1]
-
-
-
 
 		return answer
 
 
-
-
-		'''
-		x=[[1,0],[0,1]]
-		a = [[4,1],[2,2]]
-		2d matrices
-		each inside list is its own row starting from the top ex:
-
-		x looks like 1 0	a looks like 4 1
-			     0 1		     2 2
-
-		np.dot(x,a)= a
-
-		'''
-
-		# cols of the left must match the rows of the left
-
-		#self.hiddenweight2=np.array(ls.randomize2D(rows=3,cols=7))	   		#3 rows 7cols
-		#self.hiddenbias2=np.array(ls.randomize2D(rows=3,cols=1))	   		#3 rows 1 cols
-		"""
-		self.z1 = np.add(np.dot(self.hiddenweight1,self.perceptrons),self.hiddenbias1)
-
-		self.activations1 = self.squash(self.z1)
-
-		self.z2 = np.add(np.dot(self.hiddenweight2,self.activations1),self.hiddenbias2)
-
-		self.activations2 = self.squash(self.z2)
-
-		answer = self.activations2.tolist()
-		"""
-
-
-
-
-
 	def backpropagate(self,input = [[1],[0.2],[0.8]], output=[[.3],[.2],[.1]]):
-
 
 		ins = np.array(input)
 
 		def dsigmoid(z):
 			return np.exp(-z)/((1+np.exp(-z))**2)
 
-
-		# inputs can only be a column of 3
 
 		print("\n\n"+"**learning**"+"\n"+"iteration:")
 		print(self.iterations)
@@ -220,6 +181,24 @@ class AI_initer:
 		config = {
 			"save-directory" : savestring,
 			"iterations" : 0
+			"architecture":[
+				[
+					layertype, activation, neurons
+				],
+				[
+
+				],
+				[
+
+				],
+				[
+
+				],
+				[
+
+				]
+					]
+
 		}
 
 		ls.serialize(obj =config,filepath = savespot)
