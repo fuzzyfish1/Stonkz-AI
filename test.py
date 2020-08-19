@@ -7,14 +7,16 @@ import random as rand
 
 print("test.py initiated")
 
-creator.buildconfig()
+#creator.buildconfig()
 
 ai = AI('conf.json')
 
-print()
-print(ai.predict([[1],[1],[1],[1],[1],[1],[1]]))
-for z in range(100):
-    ai.backpropagate(input=[[1],[1],[1],[1],[1],[1],[1]],output= [1])
+ai.printweights()
+
+print(ai.predict([[1],[1]]))
+
+for z in range(1):
+    ai.backpropagate(input=[[.45],[.43]],output= [[0],[.5],[.3]])
 
 '''
 for x in range(100):
