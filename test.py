@@ -1,6 +1,7 @@
 #import numpy as np
 from Neural import AI
 from Neural import AI_initer as creator
+import numpy as np
 import listfuncs as ls
 import random as rand
 
@@ -9,17 +10,26 @@ print("test.py initiated")
 
 #creator.buildconfig()
 
-ai = AI('conf.json')
-
-ai.printweights()
-
-print(ai.predict([[1],[1]]))
-
-for z in range(1):
-    ai.backpropagate(input=[[.45],[.43]],output= [[0],[.5],[.3]])
-
+creator.buildconfig()
 '''
-for x in range(100):
+z =ls.randomize2D(rows= 3,cols=3)
 
-	ai.backpropagate([[1],[0],[0]], [[0],[0],[0]])
+print("\n"+"z: "+"\n\n")
+print(z)
+
+def sigmoid(inputs):
+    return np.reciprocal(1+np.exp(np.multiply(-1,inputs)))
+
+y =sigmoid(z)
+#print(y)
+
+g = ls.vectorize(z)
+print("\n"+"behold vectorized z :"+"\n\n")
+print(g)
+print("g is: ")
+f = ls.isvector(g)
+print(f)
+d = ls.isvector(z)
+print("z is: ")
+print(d)
 '''

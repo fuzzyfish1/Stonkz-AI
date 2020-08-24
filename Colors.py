@@ -1,0 +1,9 @@
+BLACK = (0,0,0)  # for background
+RED = (255,0,0)  # for blood
+BLUE = (0,0,255)
+WHITE = (255,255,255) # dunno yet
+GREEN = (0,255,0) #for apple
+DARK_BLUE = (0,0,128) #for snaky boi
+PINK = (255,200,200)
+YELLOW = (255,255,0)
+ORANGE = (255,165,0)
