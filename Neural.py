@@ -1,6 +1,5 @@
 import listfuncs as ls
 import numpy as np
-import matplotlib.pyplot as plt
 
 class AI:
 
@@ -144,10 +143,10 @@ class AI:
 
 			'''
 			if(self.architecture[x][1] == "binary step function"):
-				
+
 			if(self.architecture[x][1] == "ReLU"):
 			if(self.architecture[x][1] == "ReLU"):
-			if(self.architecture[x][1] == "ReLU"):	
+			if(self.architecture[x][1] == "ReLU"):
 			'''
 
 			#print("activations:")
