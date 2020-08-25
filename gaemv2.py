@@ -4,7 +4,7 @@ import Colors
 from Neural import *
 import json
 
-show = False
+show = True
 if show:
     import pygame
     screen = pygame.display
@@ -158,6 +158,7 @@ class snake(object):
 
         self.snaykfield = ls.fill2D(num=0, rows=rows, cols=columns)
         self.snaykfield[self.pos[0]][self.pos[1]] = 1
+        print("died")
 
         newfood()
 
@@ -287,8 +288,11 @@ class snake(object):
         targets = [[lefttarget], [righttarget], [uptarget], [downtarget]]
 
         self.snaykbrain.backpropagate(input="none", output=targets)
-        d = "avgcost: "+str(self.snaykbrain.avgcost) +"    longth: "+ str(self.length)+ "   high: "+str(highscore)
+        #print("\r")
+        d = "longth: "+ str(self.length)+" high: "+str(highscore) +"avgcost: "+str(self.snaykbrain.avgcost)
         print(d)
+
+
 
     '''    def displaysnaykfield(self):
         global screen, pxcol, pxrow
