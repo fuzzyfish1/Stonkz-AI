@@ -1,7 +1,7 @@
 {
     "save-directory":"save/",
-    "iterations":80395,
-    "totalcost":41529.532978580224,
+    "iterations":81120,
+    "totalcost":41718.73893410738,
     "architecture":[
         [
             "fullyconnected",

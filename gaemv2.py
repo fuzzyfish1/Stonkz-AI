@@ -4,12 +4,16 @@ import Colors
 from Neural import *
 import json
 
+show = False
+if show:
+    import pygame
+    screen = pygame.display
+
 FPS = 1000
 gamerunning = False
 pxrow = 15
 pxcol = 15
 field = []
-screen = pygame.display
 columns = 15
 rows = 15
 totalapples = 0
@@ -22,7 +26,7 @@ filename = "highscores.json"
 keys = []
 appleposition = (0,0)
 highscore = 0
-show = True
+
 if show:
     import pygame
 
