@@ -23,13 +23,15 @@ filename = "highscores.json"
 keys = []
 appleposition = (0,0)
 highscore = 0
+show = True
 
 # tested works
 def setup():
-    global field, pxcol, pxrow, gamerunning, screen, s, columns, rows, filename, highscore
+    global field, pxcol, pxrow, gamerunning, screen, s, columns, rows, filename, highscore,show
 
     field = ls.fill2D(num=0, rows=rows, cols=columns)
-    pygame.init()
+    if show:
+        pygame.init()
     try:
         highscore = ls.deserialize(filename)
         print("ur previous highscore was " + str(highscore))
@@ -50,7 +52,8 @@ def screensetup():
     pygame.display.set_caption("SNAYKE")
     pygame.display.set_icon(pygame.image.load('snake.png'))
 
-screensetup()
+if show:
+    screensetup()
 
 def newfood():
     global totalapples, field, appleposition, rows,columns
@@ -105,21 +108,18 @@ class snake(object):
             if self.dirnx == 1 and self.dirny == 0:
                 pass
             else:
-
                 self.dirnx = -1
                 self.dirny = 0
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             if self.dirnx == -1 and self.dirny == 0:
                 pass
             else:
-
                 self.dirnx = 1
                 self.dirny = 0
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             if self.dirnx == 0 and self.dirny == -1:
                 pass
             else:
-
                 self.dirny = 1
                 self.dirnx = 0
         elif keys[pygame.K_UP] or keys[pygame.K_w]:
@@ -131,76 +131,6 @@ class snake(object):
         elif keys[pygame.K_SPACE]:  # allows for pausing of the snake
             self.dirnx = 0
             self.dirny = 0
-
-    '''    def movesmort(self):
-        global totalapples, tiks, field, score
-        snakthink = self.snaykbrain.predict(ins =self.concatfield(),actual=[0,0,0,0])
-        for x in range(len(snakthink)):
-            if snakthink[0]>snakthink[1] and snakthink[0]>snakthink[2] and snakthink[0]>snakthink[3]: # snakthink[0 is biggest
-                if self.dirnx == 1 and self.dirny == 0:
-                    pass
-                else:
-                    self.dirnx = -1
-                    self.dirny = 0
-            elif snakthink[1]>snakthink[0] and snakthink[1]>snakthink[2] and snakthink[1]>snakthink[3]:
-                if self.dirnx == -1 and self.dirny == 0:
-                    pass
-                else:
-                    self.dirnx = 1
-                    self.dirny = 0
-            elif snakthink[2]>snakthink[1] and snakthink[2]>snakthink[0] and snakthink[2]>snakthink[3]:
-                if self.dirnx == 0 and self.dirny == -1:
-                    pass
-                else:
-                    self.dirny = 1
-                    self.dirnx = 0
-            elif snakthink[3]>snakthink[1] and snakthink[3]>snakthink[2] and snakthink[3]>snakthink[0]:
-                if self.dirnx == 0 and self.dirny == 1:
-                    pass
-                else:
-                    self.dirny = -1
-                    self.dirnx = 0
-            else:  # allows for pausing of the snake
-                pass
-
-        cxold = self.pos[0]
-        cyold = self.pos[1]
-
-        if self.dirnx == 0 and self.dirny == 0:  # also for stopping of the snake
-            pass
-        else:
-
-            self.newpos = (cxold + self.dirnx, cyold + self.dirny)
-            cx = self.newpos[0]
-            cy = self.newpos[1]
-
-            if cx not in range(len(field)) or cy not in range(len(field[0])):  # crashing into walls
-                die()
-            elif self.snaykfield[cx][cy] != 0:  # crashing into self
-                die()
-            elif field[cx][cy] == 2:  # eaing an apple
-
-                self.length += 1
-                score = self.length
-                totalapples += -1
-                self.snaykfield[cx][cy] = tiks
-                field[cx][cy] = 1
-                self.pos = [cx, cy]
-                tiks += 1
-                newfood()
-
-            elif self.snaykfield[cx][cy] == 0:
-                tiks += 1
-                self.snaykfield[cx][cy] = tiks
-                self.pos = [cx, cy]
-                field[cx][cy] = 1
-                g = (tiks - self.length)
-                for d in range(len(self.snaykfield)):
-                    for a in range(len(self.snaykfield[d])):
-                        if self.snaykfield[d][a] <= g and self.snaykfield[d][a] != 0:
-                            self.snaykfield[d][a] = 0
-                            field[d][a] = 0
-            # field = self.snaykfield'''
 
     def die(self):
 
@@ -281,9 +211,19 @@ class snake(object):
     def moveself(self):
         global totalapples, tiks, field, score,appleposition
 
-        predictions = self.snaykbrain.predict(data=ls.vectorize(field))
+        g = []
+        for n in range(-1,2):
+            for x in range(-1,2):
+                try:
+                    g.append(field[self.pos[0]+n][self.pos[1]+x])
+                except:
+                    g.append(9)
 
-        if predictions[0] > predictions[1] and predictions[0] > predictions[2] and predictions[0] > predictions[3]:
+        inputdata = ls.vectorize([self.length,appleposition[0],appleposition[1], self.dirnx,self.dirny,g])
+        #print("inputdata size: "+ str(inputdata))
+        predictions = self.snaykbrain.predict(data= inputdata)
+
+        if predictions[0] >= predictions[1] and predictions[0] > predictions[2] and predictions[0] > predictions[3]:
             # left
             if self.dirnx == 1 and self.dirny == 0:
                 pass
@@ -297,7 +237,7 @@ class snake(object):
             else:
                 self.dirnx = 1
                 self.dirny = 0
-        elif predictions[2] > predictions[1] and predictions[2] > predictions[0] and predictions[2] > predictions[3]:
+        elif predictions[2] > predictions[1] and predictions[2] > predictions[0] and predictions[2] >= predictions[3]:
             #  up
             if self.dirnx == 0 and self.dirny == -1:
                 pass
@@ -345,7 +285,6 @@ class snake(object):
         d = "avgcost: "+str(self.snaykbrain.avgcost) +"    longth: "+ str(self.length)+ "   high: "+str(highscore)
         print(d)
 
-
     '''    def displaysnaykfield(self):
         global screen, pxcol, pxrow
         screen.fill(Colors.BLACK)
@@ -390,9 +329,7 @@ class snake(object):
 
         pygame.display.flip()'''
 
-
 s = snake()
-
 
 # s.__init__()
 
@@ -414,7 +351,6 @@ def displayfield():
                 color = Colors.PINK
                 thiqness = 1
             elif field[l][u] == 1:  # draw fo snakyboi
-                print("snaked")
                 color = Colors.BLUE
                 thiqness = 0
             elif field[l][u] == 2:  # draw fo apple
@@ -443,22 +379,24 @@ def displayfield():
 
     pygame.display.flip()
 
-
 def main():
-    global FPS, gamerunning, s, field, keys
+    global FPS, gamerunning, s, field, keys,show
     newfood()
-    clock = pygame.time.Clock()
+    if show:
+        clock = pygame.time.Clock()
     while gamerunning:
-        for event in pygame.event.get():
-            keys = pygame.key.get_pressed()
-            if event.type == pygame.QUIT:
-                gamerunning = False
-                pygame.quit()
-                sys.exit()
+        if show:
+            for event in pygame.event.get():
+                keys = pygame.key.get_pressed()
+                if event.type == pygame.QUIT:
+                    gamerunning = False
+                    pygame.quit()
+                    sys.exit()
 
         s.snakeframe()
-        displayfield()
-        clock.tick(FPS)
+        if show:
+            displayfield()
+            clock.tick(FPS)
 
 main()
 

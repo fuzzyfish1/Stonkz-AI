@@ -164,6 +164,16 @@ class AI:
 
 	def backpropagate(self, input="none", output=0):
 
+		dactivations = [0 for x in range(self.width)]
+		gweights = [0 for x in range(self.width)]
+		gbias = [0 for x in range(self.width)]
+
+		def printgradients():
+			for f in gweights:
+				print(f)
+			for b in gbias:
+				print(b)
+
 		def drelu(x):
 			x[x <= 0] = 0
 			x[x > 0] = 1
@@ -197,9 +207,7 @@ class AI:
 
 		#behold my fucking math
 
-		dactivations = [0 for x in range(self.width)]
-		gweights = [0 for x in range(self.width)]
-		gbias = [0 for x in range(self.width)]
+
 
 		for x in range(1,self.width):
 			l = self.width -x
@@ -230,9 +238,11 @@ class AI:
 		self.iterations += 1
 		self.totalcost += self.avgcost
 
-		self.temphist.append(self.totalcost/self.iterations)
-		self.tempiter.append(self.iterations)
-		plt.plot(self.tempiter,self.temphist)
+		#printgradients()
+
+		#self.temphist.append(self.totalcost/self.iterations)
+		#self.tempiter.append(self.iterations)
+		#plt.plot(self.tempiter,self.temphist)
 
 		self.save()
 
@@ -258,14 +268,14 @@ class AI_initer:
 			"architecture":
 			[
 				[
-					"fullyconnected", "sigmoid", 225
+					"fullyconnected", "sigmoid", 14
 					# perceptrons the first and second thing shouldnt matter
 				],
 				[
 					"fullyconnected", "ReLU", 24
 				],
 				[
-					"fullyconnected", "identity", 18
+					"fullyconnected", "ReLU", 18
 				],
 				[
 					"fullyconnected", "sigmoid", 4
@@ -282,9 +292,9 @@ class AI_initer:
 
 		for x in range(1, len(config["architecture"])):
 
-			weights[x] = ls.fill2D(num =.1, rows=config["architecture"][x][2],cols=config["architecture"][x-1][2])
-			bias[x] = ls.fill2D(num =.1, rows=config["architecture"][x][2],cols=1)
+			weights[x] = ls.randomize2D(rows=config["architecture"][x][2],cols=config["architecture"][x-1][2])
+			bias[x] = ls.randomize2D(rows=config["architecture"][x][2],cols=1)
 
 
-		#ls.serialize(filepath=savestring + "weights.json", obj=weights)
-		#ls.serialize(filepath=savestring + "biases.json", obj=bias)
+		ls.serialize(filepath=savestring + "weights.json", obj=weights)
+		ls.serialize(filepath=savestring + "biases.json", obj=bias)
