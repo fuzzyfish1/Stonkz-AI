@@ -1,5 +1,4 @@
 import random
-import pygame
 import sys
 import Colors
 from Neural import *
@@ -24,6 +23,8 @@ keys = []
 appleposition = (0,0)
 highscore = 0
 show = True
+if show:
+    import pygame
 
 # tested works
 def setup():
