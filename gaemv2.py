@@ -141,7 +141,7 @@ class snake(object):
 
         global gamerunning, filename, field, totalapples,tiks,highscore
         #gamerunning = False
-        #print(" your score : " + str(score))
+        print("you died             "+" your score : " + str(score))
 
         tiks = 1
         totalapples = 0
@@ -287,7 +287,7 @@ class snake(object):
         targets = [[lefttarget], [righttarget], [uptarget], [downtarget]]
 
         self.snaykbrain.backpropagate(input="none", output=targets)
-        d = "avgcost: "+str(self.snaykbrain.avgcost) +"    longth: "+ str(self.length)+ "   high: "+str(highscore)
+        d ="longth: "+ str(self.length)+ "  high: "+str(highscore)+"  avgcost: "+ str(self.snaykbrain.avgcost)
         print(d)
 
     '''    def displaysnaykfield(self):

@@ -9,7 +9,9 @@ def randomize1D(length=1,coefficient = 1):
         k = 1
     else:
         k = -1
+
     d = [random.random()*coefficient*k for i in range(length)]
+
     return d
 
 # randomized 2d array
