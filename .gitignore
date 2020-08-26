@@ -1,3 +1,7 @@
 Stonkz-AI-config.json
 .idea/
 __pycache__/
+shs/
+*.sh
+venv/
+temp/
