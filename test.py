@@ -4,32 +4,31 @@ from Neural import AI_initer as creator
 import numpy as np
 import listfuncs as ls
 import random as rand
-
+import matplotlib.pyplot as plt
 
 print("test.py initiated")
+'''
+x= []
+y =[]
+x2 =[]
+y2 = []
+rows = 15
+columns = 15
+lastdiscountfactor = 0
+discountfactor =0
+for steps in range(1,14**2):
+	x.append(steps)
+	x2.append(steps)
+	discountfactor = 1-(steps/(14**2))
+	y.append(discountfactor)
+	y2.append(discountfactor-lastdiscountfactor)
+	print((discountfactor - lastdiscountfactor)*15)
+	lastdiscountfactor = discountfactor
+	
+plt.plot(x,y)
+plt.plot(x2,y2,'r-')
 
-#creator.buildconfig()
 
+plt.show()
+'''
 creator.buildconfig()
-'''
-z =ls.randomize2D(rows= 3,cols=3)
-
-print("\n"+"z: "+"\n\n")
-print(z)
-
-def sigmoid(inputs):
-    return np.reciprocal(1+np.exp(np.multiply(-1,inputs)))
-
-y =sigmoid(z)
-#print(y)
-
-g = ls.vectorize(z)
-print("\n"+"behold vectorized z :"+"\n\n")
-print(g)
-print("g is: ")
-f = ls.isvector(g)
-print(f)
-d = ls.isvector(z)
-print("z is: ")
-print(d)
-'''
