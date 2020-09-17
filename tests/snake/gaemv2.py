@@ -1,8 +1,9 @@
 import random
 import sys
-import Colors
+from tests.snake import Colors
 from Neural import *
 import json
+import creator
 
 show = True
 if show:
@@ -36,16 +37,17 @@ if show:
 def setup():
 	global field, pxcol, pxrow, gamerunning, screen, s, columns, rows, filename, highscore, show
 	
-	field = ls.fill2D(num=0, rows=rows, cols=columns)
+	field = lf.fill2D(num=0, rows=rows, cols=columns)
 	if show:
 		pygame.init()
 	try:
-		highscore = ls.deserialize(filename)
+		highscore = sf.deserialize(filename)
 		print("ur previous highscore was " + str(highscore))
 	except:
 		highscore = 0
-		ls.serialize(filepath=filename, obj=highscore)
+		sf.serialize(filepath=filename, obj=highscore)
 	
+	creator.AI_initer.buildconfig("C:\\Users\\uwish\\PycharmProjects\\Stonkz-AI\\tests\\snake\\conf.json")
 	gamerunning = True
 
 
@@ -57,7 +59,7 @@ def screensetup():
 	
 	screen = pygame.display.set_mode([columns * pxcol, rows * pxrow], pygame.RESIZABLE)
 	pygame.display.set_caption("SNAYKE")
-	pygame.display.set_icon(pygame.image.load('snake.png'))
+	pygame.display.set_icon(pygame.image.load('C:\\Users\\uwish\\PycharmProjects\\Stonkz-AI\\tests\\snake\\snake.png'))
 
 
 if show:
@@ -90,7 +92,7 @@ class snake(object):
 		self.color = color
 		self.think = think
 		
-		self.snaykbrain = AI("conf.json")
+		self.snaykbrain = AI("C:\\Users\\uwish\\PycharmProjects\\Stonkz-AI\\tests\\snake\\conf.json")
 		
 		field[pos[0]][pos[1]] = color
 		self.crashticks = 0
@@ -101,7 +103,7 @@ class snake(object):
 		self.lastdistance = 0
 		
 		self.snaykfield = []
-		self.snaykfield = ls.fill2D(num=0, rows=rows, cols=columns)
+		self.snaykfield = lf.fill2D(num=0, rows=rows, cols=columns)
 		self.snaykfield[pos[0]][pos[1]] = 1
 	
 	def snakeframe(self):
@@ -151,7 +153,7 @@ class snake(object):
 		tiks = 1
 		totalapples = 0
 		
-		field = ls.fill2D(num=0, rows=rows, cols=columns)
+		field = lf.fill2D(num=0, rows=rows, cols=columns)
 		
 		self.pos = [random.randrange(0, rows), random.randrange(0, columns)]
 		field[self.pos[0]][self.pos[1]] = self.color
@@ -161,7 +163,7 @@ class snake(object):
 		self.dirny = 0
 		self.lastdistance = 0
 		
-		self.snaykfield = ls.fill2D(num=0, rows=rows, cols=columns)
+		self.snaykfield = lf.fill2D(num=0, rows=rows, cols=columns)
 		self.snaykfield[self.pos[0]][self.pos[1]] = 1
 		print("died")
 		
@@ -231,8 +233,8 @@ class snake(object):
 				except:
 					proximity.append(9)
 		
-		inputdata = ls.vectorize(
-			[self.length, appleposition[0], appleposition[1], self.dirnx, self.dirny, proximity])
+		inputdata = lf.vectorize(
+			[self.length, appleposition, self.dirnx, self.dirny, proximity])
 		
 		predictions = self.snaykbrain.predict(data=inputdata)
 		

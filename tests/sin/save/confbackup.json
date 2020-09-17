@@ -1,12 +1,12 @@
 {
-    "save-directory":"C:\\Users\\uwish\\PycharmProjects\\Stonkz-AI\\tests\\snake\\save\\",
-    "iterations":86,
-    "totalcost":50.25,
+    "save-directory":"C:\\Users\\uwish\\PycharmProjects\\Stonkz-AI\\tests\\sin\\save\\",
+    "iterations":560,
+    "totalcost":533.7312553684812,
     "architecture":[
         [
             "fullyconnected",
-            "sigmoid",
-            14
+            "identity",
+            1
         ],
         [
             "fullyconnected",
@@ -21,7 +21,7 @@
         [
             "fullyconnected",
             "sigmoid",
-            4
+            1
         ]
     ]
 }

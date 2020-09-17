@@ -1,32 +1,27 @@
 {
     "save-directory":"save/",
-    "iterations":758,
-    "totalcost":528.2356673063597,
+    "iterations":230,
+    "totalcost":NaN,
     "architecture":[
         [
             "fullyconnected",
-            "sigmoid",
-            14
+            "identity",
+            1
         ],
         [
             "fullyconnected",
-            "sigmoid",
-            24
+            "leaky ReLU",
+            15
         ],
         [
             "fullyconnected",
-            "sigmoid",
-            18
-        ],
-        [
-            "fullyconnected",
-            "sigmoid",
+            "leaky ReLU",
             9
         ],
         [
             "fullyconnected",
             "sigmoid",
-            4
+            1
         ]
     ]
 }
